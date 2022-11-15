@@ -5,9 +5,9 @@
 MAIN            := main
 DRA             := dra
 
-# Compilers
+# Cross compilers
 CROSS           := mipsel-linux-gnu-
-AS              := $(CROSS)as
+#AS              := $(CROSS)as
 CC              := ./bin/cc1-26
 LD              := $(CROSS)ld
 CPP				:= $(CROSS)cpp
@@ -16,6 +16,12 @@ AS_FLAGS        += -Iinclude -march=r3000 -mtune=r3000 -no-pad-sections -O1
 CC_FLAGS        += -mips1 -mcpu=3000 -quiet -G0 -Wall -fno-builtin -mno-abicalls -funsigned-char -O2
 CPP_FLAGS       += -Iinclude -undef -Wall -lang-c -fno-builtin -gstabs
 CPP_FLAGS       += -Dmips -D__GNUC__=2 -D__OPTIMIZE__ -D__mips__ -D__mips -Dpsx -D__psx__ -D__psx -D_PSYQ -D__EXTENSIONS__ -D_MIPSEL -D_LANGUAGE_C -DLANGUAGE_C
+
+# The less credible compilers
+PSYQ_VER        := 4.0
+PSYQ            := docker run --rm -w /work -v ${PWD}:/work xeeynamo/psyq:$(PSYQ_VER) wine
+ASSPSX			:= $(PSYQ) /work/bin/ASPSX.EXE
+ASS_FLAGS		:= -Iinclude/psyq
 
 # Directories
 ASM_DIR         := asm
@@ -52,6 +58,7 @@ M2C_ARGS		:= -P 4
 GO				:= $(TOOLS_DIR)/go/bin/go
 GOPATH			:= $(HOME)/go
 ASPATCH			:= $(GOPATH)/bin/aspatch
+PSYQ2ELF        := $(TOOLS_DIR)/psyq-obj-parser
 
 define list_src_files
 	$(foreach dir,$(ASM_DIR)/$(1),$(wildcard $(dir)/**.s))
@@ -249,12 +256,26 @@ $(GO):
 $(ASPATCH): $(GO)
 	$(GO) install github.com/xeeynamo/sotn-decomp/tools/aspatch@latest
 
-$(BUILD_DIR)/%.s.o: %.s
-	$(AS) $(AS_FLAGS) -o $@ $<
+# The following was the good stuff from the good GNU compiler.
+# Sorry for butchering you, my love.
+# $(BUILD_DIR)/%.s.o: %.s
+# 	$(AS) $(AS_FLAGS) -o $@ $<
 $(BUILD_DIR)/%.bin.o: %.bin
 	$(LD) -r -b binary -o -Map %.map $@ $<
-$(BUILD_DIR)/%.c.o: %.c $(ASPATCH)
-	$(CPP) $(CPP_FLAGS) $< | $(CC) $(CC_FLAGS) | $(ASPATCH) | $(AS) $(AS_FLAGS) -o $@
+# $(BUILD_DIR)/%.c.o: %.c $(ASPATCH)
+# 	$(CPP) $(CPP_FLAGS) $< | $(CC) $(CC_FLAGS) | $(ASPATCH) | $(AS) $(AS_FLAGS) -o $@
+
+# And there you go the PSY-Q stuff :S
+# I will never forgive you for what you've done to my decomp.
+$(BUILD_DIR)/%.s.o: %.s
+	unix2dos $<
+	$(ASSPSX) $(ASS_FLAGS) -o $@.obj $<
+	$(PSYQ2ELF) $@.obj -o $@
+$(BUILD_DIR)/%.c.o: %.c
+	$(CPP) $(CPP_FLAGS) $< | $(CC) $(CC_FLAGS) -o $@.s
+	unix2dos $@.s
+	$(ASSPSX) $(ASS_FLAGS) -o $@.obj $@.s || true
+	$(PSYQ2ELF) $@.obj -o $@
 
 SHELL = /bin/bash -e -o pipefail
 
