@@ -21,7 +21,7 @@ CPP_FLAGS       += -Dmips -D__GNUC__=2 -D__OPTIMIZE__ -D__mips__ -D__mips -Dpsx 
 PSYQ_VER        := 4.0
 PSYQ            := docker run --rm -w /work -v ${PWD}:/work xeeynamo/psyq:$(PSYQ_VER) wine
 ASSPSX			:= $(PSYQ) /work/bin/ASPSX.EXE
-ASS_FLAGS		:= -Iinclude/psyq
+ASS_FLAGS		:= -Iinclude/psyq -G0
 
 # Directories
 ASM_DIR         := asm
