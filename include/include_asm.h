@@ -11,6 +11,8 @@
 #define INCLUDE_ASM(FOLDER, NAME)                                              \
     __asm__(".section .text\n"                                                 \
             "\t.align\t2\n"                                                    \
+            "\t.set noreorder\n"                                               \
+            "\t.set noat\n"                                                    \
             ".include \"" FOLDER "/" #NAME ".s\"\n"                            \
             "\t.set reorder\n"                                                 \
             "\t.set at\n");
