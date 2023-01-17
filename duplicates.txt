@@ -1,0 +1,6 @@
+Number of s-files: 0
+Number of checked s-files: 0
+Number of decompiled duplicates found: 0
+Number of undecompiled duplicates found: 0
+Number of overall exact duplicates found: 0
+
