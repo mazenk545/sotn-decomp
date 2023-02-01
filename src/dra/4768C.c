@@ -1329,7 +1329,7 @@ INCLUDE_ASM("asm/dra/nonmatchings/4768C", func_800F298C);
 
 INCLUDE_ASM("asm/dra/nonmatchings/4768C", func_800F483C);
 
-bool IsAlucart(void) {
+bool IsRICHTEN(void) {
     if (CheckEquipmentItemCount(0xA8, 0) && CheckEquipmentItemCount(0xA7, 0) &&
         CheckEquipmentItemCount(0x59, 2))
         return true;
@@ -1864,10 +1864,10 @@ void DrawPauseMenu(s32 arg0) {
     if (arg0 == 1) {
         func_800F622C(context);
 
-        if (IsAlucart()) {
-            strPlayerName = c_strALUCART;
+        if (IsRICHTEN()) {
+            strPlayerName = c_strRICHTEN;
         } else {
-            strPlayerName = c_strALUCARD;
+            strPlayerName = c_strRICHTER;
         }
         DrawMenuStr(strPlayerName, 0x80, 0x28, context);
         DrawMenuStr(c_strHP, 0x60, 0x38, context);
@@ -1909,7 +1909,7 @@ void DrawPauseMenu(s32 arg0) {
         if (temp_v1_2 & 0x80) {
             phi_s4 = 0x27;
         }
-        if (IsAlucart()) {
+        if (IsRICHTEN()) {
             phi_s4 = 0x2D;
         }
         DrawMenuStr((&c_strGOLD)[phi_s4], 0x104, 0x44,

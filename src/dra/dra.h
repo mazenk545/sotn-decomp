@@ -85,7 +85,7 @@ extern u32 g_playerEquip[];
 // D_80097C14 = g_playerEquip[5]
 
 extern Unkstruct10 D_800A2464[];
-extern const char* c_strALUCARD;
+extern const char* c_strRICHTER;
 extern const char* c_strSTR;
 extern const char* c_strCON;
 extern const char* c_strINT;
@@ -120,7 +120,7 @@ extern const char* c_strStereo;
 extern const char* c_strMono;
 extern const char* c_strWindow;
 extern const char* c_strTime;
-extern const char* c_strALUCART;
+extern const char* c_strRICHTEN;
 extern const char* c_strSSword;
 extern Equipment D_800A4B04[];
 extern Unkstruct_800A4B12 D_800A4B1D[];
@@ -418,7 +418,7 @@ void func_800F4994(void);
 s32 func_800F4D38(s32, s32);
 void func_800F4F48(void);
 void func_800F4FD0(void);
-bool IsAlucart(void);
+bool IsRICHTEN(void);
 s32 SquareRoot12(s32, s32);
 void func_800F53A4(void);
 bool ScissorSprite(SPRT* arg0, MenuContext* arg1);
